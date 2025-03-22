@@ -11219,10 +11219,10 @@ class KernelWriterAssembly(KernelWriter):
       self.vgprPool.resetOccupancyLimit()
       print2("info: growing pool += %d * %d for GlobalWrite\n" \
           % (minElements,ss.numVgprsPerElement))
-      self.vgprPool.growPool(0, minElements, ss.numVgprsPerElement, \
+      self.vgprPool.growPool(0, minElements, ss.numVgprsPerElement, ss.align, \
         "grow-pool for GlobalWrite")
       maxVgprs, occupancy = setOccupancy()
-      numVgprAvailable = self.vgprPool.available()
+      numVgprAvailable = self.vgprPool.availableBlock(ss.numVgprsPerElement, ss.align)
 
     # set atomicW after we potentially resize GWVW
     atomicW = min(gwvw, self.getVectorAtomicWidth(kernel))
@@ -11289,6 +11289,8 @@ class KernelWriterAssembly(KernelWriter):
     #  numElementsPerBatch = numVectorsPerBatch * kernel["GlobalWriteVectorWidth"]
     numBatches = max(1, ceilDivide(len(elements[edgeI]),numElementsPerBatch))
 
+    # totalNeededVgpr = ss.numVgprsPerElement * numElementsPerBatch
+    # assert(numVgprAvailable >= totalNeededVgpr)
     # Grow pool if needed
     # Get true numVgprAvailable
     numVgprAvailable = self.vgprPool.availableBlock(ss.numVgprsPerElement, ss.align)
@@ -11296,10 +11298,11 @@ class KernelWriterAssembly(KernelWriter):
     # print("Available vgprs =", numVgprAvailable, "Needed vgprs =", totalNeededVgpr, "pool size =", self.vgprPool.size())
     if numVgprAvailable < totalNeededVgpr:
       print2("info: growing pool += %d * %d for GlobalWrite\n" \
-          % (numBatches,ss.numVgprsPerElement))
-      availableBlock = min(0, self.vgprPool.available() - numVgprAvailable)
-      self.vgprPool.growPool(0, totalNeededVgpr + availableBlock, 1, "grow-pool for GlobalWrite")
-    # # Get true numVgprAvailable
+          % (numElementsPerBatch, ss.numVgprsPerElement))
+      # availableBlock = min(0, self.vgprPool.available() - numVgprAvailable)
+      # print("zz: ", availableBlock)
+      self.vgprPool.growPool(0, numElementsPerBatch, ss.numVgprsPerElement, ss.align, "grow-pool for GlobalWrite")
+    # Get true numVgprAvailable
     # numVgprAvailable = self.vgprPool.availableBlock(ss.numVgprsPerElement, ss.align)
     # print("Available vgprs =", numVgprAvailable, "pool size =", self.vgprPool.size())
 

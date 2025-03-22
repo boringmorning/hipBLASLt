@@ -416,10 +416,10 @@ class RegisterPool:
     for index, register in enumerate(self.pool):
         print("%u: %s"%(index, register.tag))
   
-  def growPool(self, rangeStart: int, rangeEnd: int, checkOutSize: int, comment: str=""):
+  def growPool(self, rangeStart: int, rangeEnd: int, checkOutSize: int, align: int, comment: str=""):
     tl = []
     for _ in range(rangeStart, rangeEnd):
-      tl.append(self.checkOut(checkOutSize, comment))
+      tl.append(self.checkOutAligned(checkOutSize, align, comment))
     for t in tl:
       self.checkIn(t)
 

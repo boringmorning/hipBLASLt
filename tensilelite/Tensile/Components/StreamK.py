@@ -441,7 +441,7 @@ class StreamK(Component):
             #     tl.append(self.vgprPool.checkOut(1, "grow-pool up to next occupancy for GlobalWrite"))
             # for t in tl:
             #     self.vgprPool.checkIn(t)
-            writer.vgprPool.growPool(writer.vgprPool.size()-writer.vgprPool.available(), maxVgprs, 1, \
+            writer.vgprPool.growPool(writer.vgprPool.size()-writer.vgprPool.available(), maxVgprs, 1, 1, \
                 "grow-pool up to next occupancy for GlobalWrite")
         # align = 1
         # # align adjustment
@@ -507,7 +507,7 @@ class StreamK(Component):
                 #     tl.append(self.vgprPool.checkOut(numVgprsPerElement, "grow-pool for GlobalWrite"))
                 # for t in tl:
                 #     self.vgprPool.checkIn(t)
-                writer.vgprPool.growPool(0, minElements, ss.numVgprsPerElement, \
+                writer.vgprPool.growPool(0, minElements, ss.numVgprsPerElement, 1, \
                     "grow-pool for GlobalWrite")
                 numVgprAvailable = writer.vgprPool.available()
                 print2(writer.vgprPool.state())
@@ -914,7 +914,7 @@ class StreamK(Component):
                 #     tl.append(self.vgprPool.checkOut(1, "grow-pool up to next occupancy for GlobalWrite"))
                 # for t in tl:
                 #     self.vgprPool.checkIn(t)
-                writer.vgprPool.growPool(writer.vgprPool.size()-writer.vgprPool.available(), maxVgprs, 1, \
+                writer.vgprPool.growPool(writer.vgprPool.size()-writer.vgprPool.available(), maxVgprs, 1, 1, \
                     "grow-pool up to next occupancy for GlobalWrite")
             # align = 1
             # # align adjustment
@@ -979,7 +979,7 @@ class StreamK(Component):
                     #     tl.append(self.vgprPool.checkOut(numVgprsPerElement, "grow-pool for GlobalWrite"))
                     # for t in tl:
                     #     self.vgprPool.checkIn(t)
-                    writer.vgprPool.growPool(0, minElements, ss.numVgprsPerElement, \
+                    writer.vgprPool.growPool(0, minElements, ss.numVgprsPerElement, 1, \
                         "grow-pool for GlobalWrite")
                     numVgprAvailable = writer.vgprPool.available()
                     print2(writer.vgprPool.state())
